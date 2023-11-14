@@ -48,7 +48,16 @@ Instance 1:
 Instance 2 (T.2 medium):
 - Docker and default-jre 
 Instance 3 (T.2 medium):
-- Kubectl, EKS and default-jre (Install your cluster and add the loadbalancer)
+- Kubectl, EKS and default-jre (Manually install your cluster and add the loadbalancer)
+- Please run the following command to create your cluster:
+
+    eksctl create cluster cluster01  --vpc-private-subnets="your-subnets"  --vpc-public-subnets="your-subnets"--without-nodegroup
+
+    And then after the cluster creates:
+
+    eksctl create nodegroup --cluster cluster02 --node-type t2.medium --nodes 2
+
+- The above commands will allow you to create t2.medium nodes instead of a m5.large nodes
 ```
 3. Create a VPC with the following components:
     - 2 Public subnets
