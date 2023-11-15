@@ -27,7 +27,7 @@ pipeline {
         }
      }
 
-      stage ('Backend deployment') {
+      stage ('Frontend deployment') {
         agent {label 'awsDeploy'}
         steps {
           dir('frontend'){
@@ -36,7 +36,7 @@ pipeline {
         }
      }
 
-     stage ('Backend service') {
+     stage ('Frontend service') {
         agent {label 'awsDeploy'}
         steps {
           dir('frontend'){
@@ -45,7 +45,7 @@ pipeline {
         }
      }
 
-     stage ('Backend service') {
+     stage ('Frontend Ingress') {
         agent {label 'awsDeploy'}
         steps {
           dir('frontend'){
