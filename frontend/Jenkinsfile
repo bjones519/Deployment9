@@ -51,32 +51,56 @@ pipeline {
         }
      }
 
-    //   stage ('Frontend deployment') {
-    //     agent {label 'awsDeploy2'}
-    //     steps {
-    //       dir('frontend'){
-    //         sh 'kubectl apply -f deployment.yaml'
-    //       }
-    //     }
-    //  }
+      stage ('Frontend deployment') {
+        agent {label 'awsDeploy2'}
+        steps {
+          dir('frontend'){
+            sh 'kubectl apply -f deployment.yaml'
+          }
+        }
+        post{
+          failure {
+            withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
+              sh 'python3 CICD_SlackNotif.py' 
+            }
 
-    //  stage ('Frontend service') {
-    //     agent {label 'awsDeploy2'}
-    //     steps {
-    //       dir('frontend'){
-    //         sh 'kubectl apply -f service.yaml '
-    //       }
-    //     }
-    //  }
+          }
+        }
+     }
 
-    //  stage ('Frontend Ingress') {
-    //     agent {label 'awsDeploy2'}
-    //     steps {
-    //       dir('frontend'){
-    //         sh 'kubectl apply -f ingress.yaml '
-    //       }
-    //     }
-    //  }
+     stage ('Frontend service') {
+        agent {label 'awsDeploy2'}
+        steps {
+          dir('frontend'){
+            sh 'kubectl apply -f service.yaml '
+          }
+        }
+        post{
+          failure {
+            withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
+              sh 'python3 CICD_SlackNotif.py' 
+            }
+
+          }
+        }
+     }
+
+     stage ('Frontend Ingress') {
+        agent {label 'awsDeploy2'}
+        steps {
+          dir('frontend'){
+            sh 'kubectl apply -f ingress.yaml '
+          }
+        }
+        post{
+          failure {
+            withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
+              sh 'python3 CICD_SlackNotif.py' 
+            }
+
+          }
+        }
+     }
 
       stage ('Slack Notification Success') {
         steps {
