@@ -1,8 +1,10 @@
 pipeline {
   agent {label 'awsDeploy2'}
   environment{
-      DOCKERHUB_CREDENTIALS = credentials('bjones25-dockerhub')
-      }
+    DOCKERHUB_CREDENTIALS = credentials('bjones25-dockerhub')
+    WEBHOOK_URL = credentials('webhook_url')
+    PIPELINE_STATUS = credentials('pipeline_status')
+  }
 
     stages {
      
@@ -27,32 +29,58 @@ pipeline {
         }
      }
 
-      stage ('Frontend deployment') {
-        agent {label 'awsDeploy'}
-        steps {
-          dir('frontend'){
-            sh 'kubectl apply -f deployment.yaml'
-          }
-        }
-     }
+    //   stage ('Frontend deployment') {
+    //     agent {label 'awsDeploy'}
+    //     steps {
+    //       dir('frontend'){
+    //         sh 'kubectl apply -f deployment.yaml'
+    //       }
+    //     }
+    //  }
 
-     stage ('Frontend service') {
-        agent {label 'awsDeploy'}
-        steps {
-          dir('frontend'){
-            sh 'kubectl apply -f service.yaml '
-          }
-        }
-     }
+    //  stage ('Frontend service') {
+    //     agent {label 'awsDeploy'}
+    //     steps {
+    //       dir('frontend'){
+    //         sh 'kubectl apply -f service.yaml '
+    //       }
+    //     }
+    //  }
 
-     stage ('Frontend Ingress') {
+    //  stage ('Frontend Ingress') {
+    //     agent {label 'awsDeploy'}
+    //     steps {
+    //       dir('frontend'){
+    //         sh 'kubectl apply -f ingress.yaml '
+    //       }
+    //     }
+    //  }
+
+     post{
         agent {label 'awsDeploy'}
-        steps {
-          dir('frontend'){
-            sh 'kubectl apply -f ingress.yaml '
+        success {
+          withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url'),
+                           string(credentialsId: 'PIPELINE_STATUS', variable: 'pipeline_status')]) {
+            {
+              sh 'python3 CICD_SlackNotif.py' 
+            }
           }
+       
         }
-     }
+      }
+
+      post{
+        agent {label 'awsDeploy'}
+        failure {
+          withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
+            {
+              sh 'python3 CICD_SlackNotif.py' 
+            }
+          }
+       
+        }
+      }
+
 
     }
 }
