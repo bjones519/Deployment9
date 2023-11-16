@@ -21,8 +21,8 @@ def slack_notif(message):
 pipeline_status = os.getenv("pipeline_status")
 
 if pipeline_status == "SUCCESS":
-    message = "Jenkins pipeline completed successfully!"
+    message = "The Jenkins pipeline completed successfully!"
     slack_notif(message)
 else:
-    message = "Jenkins pipeline did not complete successfully!"
+    message = "The Jenkins pipeline failed"
     slack_notif(message)

@@ -9,7 +9,7 @@ pipeline {
       stage ('Build') {
         steps {
           dir('frontend'){
-            sh ' docker build -t bjones25/d9frontend .'
+            sh 'sudo docker build -t bjones25/d9frontend .'
           }
         }
         post{
