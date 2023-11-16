@@ -2,8 +2,6 @@ pipeline {
   agent {label 'awsDeploy'}
   environment{
     DOCKERHUB_CREDENTIALS = credentials('bjones25-dockerhub')
-    WEBHOOK_URL = credentials('webhook_url')
-    PIPELINE_STATUS = credentials('pipeline_status')
   }
 
     stages {
