@@ -12,10 +12,26 @@ pipeline {
             sh 'sudo docker build -t bjones25/d9backend .'
           }
         }
+        post{
+          failure {
+            withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
+              sh 'python3 CICD_SlackNotif.py' 
+            }
+
+          }
+        }
       }
      stage ('Login') {
         steps {
             sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+        }
+        post{
+          failure {
+            withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
+              sh 'python3 CICD_SlackNotif.py' 
+            }
+
+          }
         }
       }
 
@@ -23,6 +39,14 @@ pipeline {
         steps {
           dir('backend'){
             sh 'sudo docker push bjones25/d9backend'
+          }
+        }
+        post{
+          failure {
+            withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
+              sh 'python3 CICD_SlackNotif.py' 
+            }
+
           }
         }
      }
@@ -34,6 +58,14 @@ pipeline {
             sh 'kubectl apply -f deployment.yaml'
           }
         }
+        post{
+          failure {
+            withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
+              sh 'python3 CICD_SlackNotif.py' 
+            }
+
+          }
+        }
      }
 
      stage ('Backend service') {
@@ -43,7 +75,30 @@ pipeline {
             sh 'kubectl apply -f service.yaml '
           }
         }
-     }
+        post{
+          failure {
+            withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
+              sh 'python3 CICD_SlackNotif.py' 
+            }
+
+          }
+        }
+      }
+
+      stage ('Slack Notification Success') {
+        steps {
+        sh 'echo running script' 
+        }
+        post{
+          success {
+            withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url'),
+              string(credentialsId: 'PIPELINE_STATUS', variable: 'pipeline_status')]) {
+                    sh 'python3 CICD_SlackNotif.py' 
+              }
+
+          }
+        }
+      }
 
     }
 }
