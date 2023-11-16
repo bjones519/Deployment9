@@ -71,7 +71,7 @@ pipeline {
         }
       }
         
-      stage ('Slack Notification Success') {
+      stage ('Slack Notification Failure') {
         steps {
         sh ' echo running script' 
         }
