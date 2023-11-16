@@ -57,7 +57,6 @@ pipeline {
     //  }
 
      post{
-        agent {label 'awsDeploy'}
         success {
           withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url'),
                            string(credentialsId: 'PIPELINE_STATUS', variable: 'pipeline_status')]) {
@@ -70,7 +69,6 @@ pipeline {
       }
 
       post{
-        agent {label 'awsDeploy'}
         failure {
           withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
             {
