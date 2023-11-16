@@ -19,7 +19,7 @@ resource "aws_subnet" "public_a" {
   map_public_ip_on_launch = true
 
   tags = {
-    "Name"                            = "private | us-east-1b"
+    "Name"                            = "public | us-east-1b"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
@@ -41,7 +41,7 @@ resource "aws_subnet" "public_b" {
   map_public_ip_on_launch = true
 
   tags = {
-    "Name"                            = "private | us-east-1b"
+    "Name"                            = "public | us-east-1b"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
