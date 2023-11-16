@@ -28,3 +28,9 @@ curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/d
 
 #moving eks cli binary to user path
 sudo mv /tmp/eksctl /usr/local/bin
+
+#Python dependencies
+sudo apt update
+sudo apt install -y software-properties-common 
+sudo add-apt-repository -y ppa:deadsnakes/ppa 
+sudo apt install -y python3.7 

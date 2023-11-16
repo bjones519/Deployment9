@@ -27,6 +27,12 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 #################### Verify that the Docker Engine installation is successful by running the hello-world image ####################
 sudo docker run hello-world
 
+#################### Python dependencies#################
+sudo apt update
+sudo apt install -y software-properties-common 
+sudo add-apt-repository -y ppa:deadsnakes/ppa 
+sudo apt install -y python3.7 
+
 #################### Done! ####################
 echo "Installations successfully installed!"
 
