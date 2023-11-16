@@ -5,7 +5,7 @@ echo “Script started at: $(date)”
 sudo apt-get update
 
 #install java
-sudo apt install -y fontconfig -y openjdk-17-jre
+sudo apt install -y fontconfig -y openjdk-default-jre
 sudo apt update
 
 #download aws cli
