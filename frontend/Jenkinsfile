@@ -23,7 +23,7 @@ pipeline {
 
      stage ('Push') {
         steps {
-          dir('frontnd'){
+          dir('frontend'){
             sh 'sudo docker push bjones25/d9frontend'
           }
         }
