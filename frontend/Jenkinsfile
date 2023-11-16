@@ -57,28 +57,30 @@ pipeline {
     //  }
 
      stage ('Slack Notification'){
+      parallel {
         post{
            success {
              withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url'),
                               string(credentialsId: 'PIPELINE_STATUS', variable: 'pipeline_status')]) {
                               
                  sh 'python3 CICD_SlackNotif.py' 
-               
+
              }
-          
+
            }
          }
-    
+
          post{
            failure {
              withCredentials([string(credentialsId: 'WEBHOOK_URL', variable: 'webhook_url')]) {
-               
+
                  sh 'python3 CICD_SlackNotif.py' 
-               
+
              }
-          
+
            }
          }
+      }
      }
 
     }
