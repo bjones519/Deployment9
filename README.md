@@ -29,8 +29,8 @@ In this deployment, we launched a 2-tier(Django python and React) e-commerce app
 - 3 Ubuntu 18.04 t2.medium EC2 instances
   - Separate instances for Jenkins manager and Jenkins agent isolation
   - Security groups restricting access
-    - Jenkins SG opens ports 22 and 8080
-    - Jenkins Agent SG opens ports 22
+    - Jenkins Security Group opens ports 22 and 8080
+    - Jenkins Agent Security Group opens ports 22
 - EKS Cluster
 - 2 Nodes on Linux t2.medium EC2 instances
 
@@ -54,10 +54,11 @@ eksctl create cluster cluster01  --vpc-private-subnets="your-subnets"  --vpc-pub
 ![Cluster](screenshots/Screen%20Shot%202023-11-16%20at%208.28.36%20AM.png)
 ![ClusterCreating](screenshots/Screen%20Shot%202023-11-16%20at%208.28.55%20AM.png)
 
--  After the cluster creates run to create your node groups:
+-  After the cluster creates run:
 ```
 eksctl create nodegroup --cluster cluster01 --node-private-networking --node-type t2.medium --nodes 2
 ```
+![NodeCreating](screenshots/Screen%20Shot%202023-11-16%20at%209.04.07%20AM.png)
 
 
 ## Jenkins CI/CD Pipeline
@@ -81,7 +82,7 @@ eksctl create nodegroup --cluster cluster01 --node-private-networking --node-typ
 - Merged branch to trigger production deploy to main
 - Jenkinsfile deploys latest merged code on the master branch, which deploys the application 
 ![Application](screenshots/Screen%20Shot%202023-11-16%20at%208.49.36%20PM.png)
-)
+
 ## Benefits Achieved
 
 - Collaboration through infrastructure as code
@@ -94,7 +95,8 @@ eksctl create nodegroup --cluster cluster01 --node-private-networking --node-typ
 ### 500 Error
 
 - **Issue:** After deploying frontend and backend, then navigating to the application we got a 500 error indicating that it was a server error with the backend.
-- **Resolution:** There was a typo in the backend service.yaml, which was fixed and redeployed and the application worked successfully.
+![500](screenshots/Screenshot%202023-11-17%20at%205.42.57%20PM.png)
+- **Resolution:** There was a typo in the backend service.yaml, which was fixed then redeployed and the application worked successfully.
 
 ## System Design
 ![SystemDesign](screenshots/)
