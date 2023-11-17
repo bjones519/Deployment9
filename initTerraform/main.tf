@@ -20,7 +20,7 @@ resource "aws_subnet" "public_a" {
 
   tags = {
     "Name"                            = "public | us-east-1b"
-    "kubernetes.io/role/internal-elb" = "1"
+    "kubernetes.io/role/elb" = "1"
   }
 }
 
@@ -31,6 +31,7 @@ resource "aws_subnet" "private_a" {
 
   tags = {
     "Name" = "private | us-east-1a"
+    "kubernetes.io/role/internal-elb" = "1"
   }
 }
 
@@ -42,7 +43,7 @@ resource "aws_subnet" "public_b" {
 
   tags = {
     "Name"                            = "public | us-east-1b"
-    "kubernetes.io/role/internal-elb" = "1"
+    "kubernetes.io/role/elb" = "1"
   }
 }
 
@@ -53,6 +54,7 @@ resource "aws_subnet" "private_b" {
 
   tags = {
     "Name" = "private | us-east-1b"
+    "kubernetes.io/role/internal-elb" = "1"
   }
 }
 
