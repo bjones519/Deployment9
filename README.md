@@ -1,18 +1,18 @@
 
-#### November 13, 2023
+#### November 17, 2023
 ________________________________________________________	
 
 # Two-Tier E-Commerce Application Deployment on EKS
 
 Deployment Contributors:
 
-**Project Manager**: TBD <br />
+**Project Manager**: Brittney Jones <br />
 **Chief Architect**: Belinda Dunu <br />
 **System Administrator**: Brittney Jones
 
 ## Deployment Overview
 
-In this deployment, we launched a 2-tier(Django Python and React) e-commerce application using Terraform infrastructure as code (IAC) for provisioning and Jenkins for CI/CD automation. We chose this approach in order to enhance consistency, collaboration, security, and ease of maintenance compared to manual deployments.
+In this deployment, we launched a 2-tier(Django python and React) e-commerce application using Terraform infrastructure as code (IAC) for provisioning resources on AWS and Jenkins for CI/CD automation. We chose this approach in order to enhance consistency, collaboration, security, and ease of maintenance compared to manual deployments.
 
 ## Infrastructure Overview
 
@@ -26,11 +26,13 @@ In this deployment, we launched a 2-tier(Django Python and React) e-commerce app
   - Enables public subnet internet connectivity
 - NAT gateway attached to VPC
     - Enables private subnet internet connectivity
-- 2 Ubuntu 18.04 t2.micro EC2 instances
-  - Separate instances for Jenkins and app isolation
+- 3 Ubuntu 18.04 t2.medium EC2 instances
+  - Separate instances for Jenkins manager and Jenkins agent isolation
   - Security groups restricting access
     - Jenkins SG opens ports 22 and 8080
-    - App SG opens ports 22 and 8000
+    - Jenkins Agent SG opens ports 22
+- EKS Cluster
+- 2 Nodes on Linux t2.medium EC2 instances
 
 ## Jenkins Server Setup
 
@@ -41,13 +43,34 @@ In this deployment, we launched a 2-tier(Django Python and React) e-commerce app
 - Generated SSH key pair and copied the public key to the app server
   - Allows SSH access from Jenkins without a password
 
+
+## EKS Cluster Setup
+
+- To create the cluster run
+```
+eksctl create cluster cluster01  --vpc-private-subnets="your-subnets"  --vpc-public-subnets="your-subnets"--without-nodegroup
+```
+
+![Cluster](screenshots/Screen%20Shot%202023-11-16%20at%208.28.36%20AM.png)
+![ClusterCreating](screenshots/Screen%20Shot%202023-11-16%20at%208.28.55%20AM.png)
+
+-  After the cluster creates run to create your node groups:
+```
+eksctl create nodegroup --cluster cluster01 --node-private-networking --node-type t2.medium --nodes 2
+```
+
+
 ## Jenkins CI/CD Pipeline
 
 - Created GitHub-integrated multibranch pipeline
 - Automates build and deploy for all branches
-- Jenkinsfile deploy stage executes setup scripts to deploy the latest app code
-- Setup scripts install dependencies and start the application
-  - Contains necessary steps to deploy the app
+
+- Jenkinsfile containerizes the application, logs into Dockerhub, pushes the image to Dockerhub. Then using the Kubernetes manifest files, deploys the application onto an EKS Cluster.
+ ![Backend Deployment](screenshots/Screen%20Shot%202023-11-16%20at%208.24.31%20PM.png)
+  ![Frontend Deployment](screenshots/Screen%20Shot%202023-11-16%20at%208.26.52%20PM.png)
+- Lastly a notification is sent to a Slack channel, letting the channel know if the pipeline completed successfully or failed, using a [Python Script](CICD_SlackNotif.py).
+  ![Frontend Deployment](screenshots/Screen%20Shot%202023-11-16%20at%208.26.38%20PM.png)
+
 
 ## Testing and Deployment
 
@@ -56,8 +79,9 @@ In this deployment, we launched a 2-tier(Django Python and React) e-commerce app
 - Ran build on a new branch using Jenkinsfile
 - Validated updated app functionality
 - Merged branch to trigger production deploy to main
-- Jenkinsfile deploys latest merged code which deploys the application 
-
+- Jenkinsfile deploys latest merged code on the master branch, which deploys the application 
+![Application](screenshots/Screen%20Shot%202023-11-16%20at%208.49.36%20PM.png)
+)
 ## Benefits Achieved
 
 - Collaboration through infrastructure as code
@@ -67,12 +91,16 @@ In this deployment, we launched a 2-tier(Django Python and React) e-commerce app
 
 ## Issues Faced:
 
+### 500 Error
+
+- **Issue:** After deploying frontend and backend, then navigating to the application we got a 500 error indicating that it was a server error with the backend.
+- **Resolution:** There was a typo in the backend service.yaml, which was fixed and redeployed and the application worked successfully.
 
 ## System Design
-
+![SystemDesign](screenshots/)
 
 ## Optimizations
-
+- Congifure a Jenkins agent for automated infrastructure provisioning using Terraform
+- Set Up Cloud Watch Alarms to be notified when certain thresholds are crossed
 
 ## Conclusion
-
