@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: e-commerce-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: e-commerce-backend
+  template:
+    metadata:
+      labels:
+        app: e-commerce-backend
+    spec:
+      containers:
+        - name: e-commerce-backend
+          image: bjones25/d9backend:latest
+          ports:
+            - name: http
+              containerPort: 8000
