@@ -123,7 +123,7 @@ Error: checking AWS STS access - cannot get role ARN for current session: operat
 
 
 ## System Design
-![SystemDesign](screenshots/Screenshot%202023-11-17%20at%208.56.54%20PM.png)
+![SystemDesign](screenshots/Screenshot%202023-11-17%20at%2010.07.28%20PM.png)
 
 ## Optimizations
 - Congifure a Jenkins agent for automated infrastructure provisioning using Terraform
