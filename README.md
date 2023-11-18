@@ -10,6 +10,19 @@ Deployment Contributors:
 **Chief Architect**: Belinda Dunu <br />
 **System Administrator**: Brittney Jones
 
+## Table of Content
+- [Deployment Overview](#deployment-overview)
+- [Infrastructure Overview](#deployment-overview)
+- [Jenkins Server Setup](#jenkins-server-setup)
+- [EKS Server Setup](#eks-server-setup)
+- [Jenkins CI/CD Pipeline](#jenkins-cicd-pipeline)
+- [Testing and Deployment](#testing-and-deployment)
+- [Benefits Achieved](#benefits-achieved)
+- [Issues Faced](#issues-faced)
+- [System Diagram](#system-design)
+- [Optimizations](#optimizations)
+- [Conclusion](#conclusion)
+
 ## Deployment Overview
 
 In this deployment, we launched a 2-tier(Django python and React) e-commerce application using Terraform infrastructure as code (IAC) for provisioning resources on AWS and Jenkins for CI/CD automation. We chose this approach in order to enhance consistency, collaboration, security, and ease of maintenance compared to manual deployments.
@@ -89,6 +102,9 @@ eksctl create nodegroup --cluster cluster01 --node-private-networking --node-typ
 - Security via isolated environments and access controls
 - Maintainability with automated CI/CD deployments
 - Consistency by defining infrastructure and deployments in code
+- Observability into our cluster through container insights on Cloudwatch
+![Cloud Watch](screenshots/Screen%20Shot%202023-11-16%20at%208.30.16%20PM.png)
+
 
 ## Issues Faced:
 
@@ -98,11 +114,21 @@ eksctl create nodegroup --cluster cluster01 --node-private-networking --node-typ
 ![500](screenshots/Screenshot%202023-11-17%20at%205.42.57%20PM.png)
 - **Resolution:** There was a typo in the backend service.yaml, which was fixed then redeployed and the application worked successfully.
 
+### AWS Identity
+- **Issue:** When trying to create the EKS Cluster through the CLI, AWS returned the following error:
+```
+Error: checking AWS STS access - cannot get role ARN for current session: operation error STS: GetCallerIdentity:
+```
+- **Resolution:** We had to authenticate through AWS using `aws configure`
+
+
 ## System Design
 ![SystemDesign](screenshots/Screenshot%202023-11-17%20at%208.56.54%20PM.png)
 
 ## Optimizations
 - Congifure a Jenkins agent for automated infrastructure provisioning using Terraform
-- Set Up Cloud Watch Alarms to be notified when certain thresholds are crossed such as CPU and Memory
+- Set Up Cloud Watch Alarms to be notified when certain thresholds are crossed such as CPU, Memory and when/if nodes, pods or the cluster go offline.
+- Seperate the backend and frontend pods, so the frontend pods are deployed in a public subnet and the backend pods stay in the private subnet.
 
 ## Conclusion
+This project demonstrated using Terraform IAC and Jenkins CI/CD to deploy a 2-tier e-commerce application on AWS EKS. Some key benefits include improved availability through load balancing, automated software deployment, security, consistency, and maintainability of the deployment process. Proactively managing dependencies, resources, connectivity, and configurations is critical for smooth deployments. For future deployments, integrating Terraform with Jenkins, improving observability, and implementing backup/DR(disaster recovery) would further optimize the deployment architecture.
