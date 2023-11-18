@@ -79,7 +79,7 @@ eksctl create nodegroup --cluster cluster01 --node-private-networking --node-typ
 - Simulated code change to test pipeline
 - Ran build on a new branch using Jenkinsfile
 - Validated updated app functionality
-- Merged branch to trigger production deploy to main
+- Merged branch to trigger production deploy to master
 - Jenkinsfile deploys latest merged code on the master branch, which deploys the application 
 ![Application](screenshots/Screen%20Shot%202023-11-16%20at%208.49.36%20PM.png)
 
@@ -92,7 +92,7 @@ eksctl create nodegroup --cluster cluster01 --node-private-networking --node-typ
 
 ## Issues Faced:
 
-### 500 Error
+### 500 Status Code
 
 - **Issue:** After deploying frontend and backend, then navigating to the application we got a 500 error indicating that it was a server error with the backend.
 ![500](screenshots/Screenshot%202023-11-17%20at%205.42.57%20PM.png)
