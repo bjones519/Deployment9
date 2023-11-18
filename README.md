@@ -32,7 +32,7 @@ In this deployment, we launched a 2-tier(Django python and React) e-commerce app
     - Jenkins Security Group opens ports 22 and 8080
     - Jenkins Agent Security Group opens ports 22
 - EKS Cluster
-- 2 Nodes on Linux t2.medium EC2 instances
+- 2 Nodes on  Amazon Linux t2.medium EC2 instances
 
 ## Jenkins Server Setup
 
@@ -103,6 +103,6 @@ eksctl create nodegroup --cluster cluster01 --node-private-networking --node-typ
 
 ## Optimizations
 - Congifure a Jenkins agent for automated infrastructure provisioning using Terraform
-- Set Up Cloud Watch Alarms to be notified when certain thresholds are crossed
+- Set Up Cloud Watch Alarms to be notified when certain thresholds are crossed such as CPU and Memory
 
 ## Conclusion
