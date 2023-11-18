@@ -99,7 +99,7 @@ eksctl create nodegroup --cluster cluster01 --node-private-networking --node-typ
 - **Resolution:** There was a typo in the backend service.yaml, which was fixed then redeployed and the application worked successfully.
 
 ## System Design
-![SystemDesign](screenshots/)
+![SystemDesign](screenshots/Screenshot%202023-11-17%20at%208.56.54%20PM.png)
 
 ## Optimizations
 - Congifure a Jenkins agent for automated infrastructure provisioning using Terraform
