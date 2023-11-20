@@ -128,7 +128,8 @@ Error: checking AWS STS access - cannot get role ARN for current session: operat
 ## Optimizations
 - Congifure a Jenkins agent for automated infrastructure provisioning using Terraform
 - Set Up Cloud Watch Alarms to be notified when certain thresholds are crossed such as CPU, Memory and when/if nodes, pods or the cluster go offline.
-- Seperate the backend and frontend pods, so the frontend pods are deployed in a public subnet and the backend pods stay in the private subnet.
+- Add testing for the frontend and backend of the application
+- Combine the Kubernetes deployment and service files to include both the frontend and backend
 
 ## Conclusion
 This project demonstrated using Terraform IAC and Jenkins CI/CD to deploy a 2-tier e-commerce application on AWS EKS. Some key benefits include improved availability through load balancing, automated software deployment, security, consistency, and maintainability of the deployment process. Proactively managing dependencies, resources, connectivity, and configurations is critical for smooth deployments. For future deployments, integrating Terraform with Jenkins, improving observability, and implementing backup/DR(disaster recovery) would further optimize the deployment architecture.
